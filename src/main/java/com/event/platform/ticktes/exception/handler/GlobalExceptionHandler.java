@@ -1,6 +1,7 @@
 package com.event.platform.ticktes.exception.handler;
 
 import com.event.platform.ticktes.exception.base.BaseException;
+import com.event.platform.ticktes.exception.custome.UserNotFoundException;
 import com.event.platform.ticktes.exception.response.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -11,6 +12,13 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 @Slf4j
 public class GlobalExceptionHandler {
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleUserNotFoundException(UserNotFoundException ex){
+        log.error("caught UserNotFoundException",ex);
+        ErrorResponse respone = new ErrorResponse("Faild", HttpStatus.NOT_FOUND.value(),ex.getMessage());
+        return new ResponseEntity<>(respone,HttpStatus.NOT_FOUND);
+    }
 
     @ExceptionHandler(BaseException.class)
     public ResponseEntity<ErrorResponse> handleBaseException ( BaseException ex ){

@@ -1,5 +1,6 @@
 package com.event.platform.ticktes.user.service;
 
+import com.event.platform.ticktes.exception.custome.UserNotFoundException;
 import com.event.platform.ticktes.user.model.User;
 import com.event.platform.ticktes.user.repository.UserRepository;
 import lombok.AllArgsConstructor;
@@ -19,6 +20,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User createNewUser(User user) {
-
+        if (userRepository.existByEmail(user.getEmail())){
+            throw new UserNotFoundException("User Already Exist with this email: "+  user.getEmail());
+        }
+        User createUser = userRepository.save(user);
+        return createUser;
     }
 }
