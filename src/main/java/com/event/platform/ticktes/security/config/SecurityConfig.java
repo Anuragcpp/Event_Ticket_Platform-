@@ -1,14 +1,21 @@
-package com.event.platform.ticktes.config;
+package com.event.platform.ticktes.security.config;
 
+import com.event.platform.ticktes.security.JwtAuthenticationFilter;
+import com.event.platform.ticktes.user.model.User;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
+@RequiredArgsConstructor
 public class SecurityConfig {
+
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
@@ -20,7 +27,8 @@ public class SecurityConfig {
                                 .requestMatchers("/api/auth/**").permitAll()
                                 .anyRequest()
                                 .authenticated()
-                        );
+                        )
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
     }
 

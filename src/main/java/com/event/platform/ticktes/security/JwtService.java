@@ -1,4 +1,4 @@
-package com.event.platform.ticktes.auth.service;
+package com.event.platform.ticktes.security;
 
 import com.event.platform.ticktes.user.model.User;
 import io.jsonwebtoken.Claims;
@@ -13,7 +13,6 @@ import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.function.Function;
 
 @Service
@@ -24,6 +23,39 @@ public class JwtService {
 
     @Value("jwt.jwtExpiration")
     private Long jwtExpiration;
+
+    public String generateToken(String token ){
+        return createToken(new HashMap<>(),token);
+    }
+
+    public String extractUsername(String token) {
+        return extractClaim(token,Claims::getSubject);
+    }
+
+    public Date extractExpiration(String token ){
+        return extractClaim(token,Claims::getExpiration);
+    }
+
+    public boolean isTokenExpired(String token){
+        return extractExpiration(token).before(new Date());
+    }
+
+    public boolean isTokenValidate(String token, User user){
+        return user.getEmail().equals(extractUsername(token)) && !isTokenExpired(token);
+    }
+
+    private <T> T extractClaim(String token,Function<Claims,T> claimsResolver){
+        final Claims claims = extractAllClaims(token);
+        return claimsResolver.apply(claims);
+    }
+
+    private Claims extractAllClaims(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(getSignInKey())
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+    }
 
     private String createToken(Map<String , Object> claims, String subject ){
         return Jwts.builder()
