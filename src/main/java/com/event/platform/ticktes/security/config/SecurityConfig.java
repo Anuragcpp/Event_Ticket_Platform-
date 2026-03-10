@@ -15,7 +15,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    
+
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Bean
@@ -25,9 +25,9 @@ public class SecurityConfig {
                 .csrf(cref -> cref.disable())
                 .authorizeHttpRequests(auth ->
                         auth
-                                .requestMatchers("/api/auth/**").permitAll()
+                                .requestMatchers("/api/v1/auth","/api/v1/auth/**").permitAll()
                                 .anyRequest()
-                                .authenticated()
+                                .permitAll()
                         )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
