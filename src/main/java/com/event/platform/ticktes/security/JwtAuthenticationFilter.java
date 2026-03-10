@@ -2,7 +2,6 @@ package com.event.platform.ticktes.security;
 
 import com.event.platform.ticktes.user.model.User;
 import com.event.platform.ticktes.user.service.UserService;
-import com.event.platform.ticktes.user.service.UserServiceImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,8 +20,8 @@ import java.io.IOException;
 
 @Component
 @RequiredArgsConstructor
-@AllArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
+
     private final JwtService jwtService;
     private final UserService userService;
 

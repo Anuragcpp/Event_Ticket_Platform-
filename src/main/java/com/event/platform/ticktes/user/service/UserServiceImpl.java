@@ -7,10 +7,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
-@AllArgsConstructor
 @RequiredArgsConstructor
 @Builder
 public class UserServiceImpl implements UserService {
@@ -20,9 +20,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User createNewUser(User user) {
-        if (userRepository.existByEmail(user.getEmail())){
+        if (userRepository.existsByEmail(user.getEmail())){
             throw new UserNotFoundException("User Already Exist with this email: "+  user.getEmail());
         }
+        //user.setPassword(PasswordEncoder.encord());
         User createUser = userRepository.save(user);
         return createUser;
     }
@@ -30,5 +31,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public User loadUserByUserName(String userName) {
         return null;
+    }
+
+    @Override
+    public boolean userExistByEmail(String email) {
+        return userRepository.existsByEmail(email);
     }
 }

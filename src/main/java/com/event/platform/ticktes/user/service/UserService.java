@@ -6,4 +6,6 @@ public interface UserService {
     public User createNewUser(User user);
 
     public User loadUserByUserName(String userName);
+
+    boolean userExistByEmail(String email);
 }
