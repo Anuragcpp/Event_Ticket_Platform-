@@ -27,7 +27,7 @@ public class AuthController  {
     private final UserMapper userMapper;
 
 
-    @PostMapping
+    @PostMapping("/signup")
     public ResponseEntity<ApiResponse<String >> SignUpUser(
             @Valid @RequestBody CreateNewUserRequestDto createNewUserRequestDto
             ) {
