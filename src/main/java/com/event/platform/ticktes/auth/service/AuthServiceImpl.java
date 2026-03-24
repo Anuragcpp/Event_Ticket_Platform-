@@ -17,6 +17,6 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public String CreateUser(User user) {
         User createdUser = userService.createNewUser(user);
-        return jwtService.generateToken(createdUser.getEmail());
+        return null;//jwtService.generateToken(createdUser.getEmail());
     }
 }
